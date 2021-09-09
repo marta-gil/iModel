@@ -28,7 +28,7 @@ contains
     ! Compute the density function defined in 'Voronoi Tessellations and their application to
     !  climate and global modeling' by Lili Ju, Todd Ringler and Max Gunzburger
     !--------------------------------------------------------------------------
-    real (r8) function densf(x) result(dens_f)
+    real (r8) function densf_original(x) result(dens_f)
         real (r8), dimension(1:2), intent(in) :: x
         real (r8), dimension(1:3) :: p
         real (r8), dimension(1:3) :: pc
@@ -82,9 +82,68 @@ contains
         end if
         !Normalization - Make it in [0,1]
         dens_f = dens_f/gammas**4
+    end function densf_original
+
+    !--------------------------------------------------------------------------
+    ! Compute the density function defined in 'Voronoi Tessellations and
+    ! their application to climate and global modeling' by Lili Ju, Todd
+    ! Ringler and Max Gunzburger
+    !
+    ! Marta Gil Bardají - Vortex FdC
+    ! - Centered at 0 always
+    ! - Gammas (ratio between small and large cells) larger than 3
+    ! - Small high resolution area maxdist = 0.017 for 100km radius
+    ! - Large transition area -> some relation to gamma? maxdist?
+    !--------------------------------------------------------------------------
+    real (r8) function densf(x) result(dens_f)
+        real (r8), dimension(1:2), intent(in) :: x
+        real (r8), dimension(1:3) :: p
+        real (r8) :: lat
+        real (r8) :: lon
+        real (r8) :: coslat
+        real (r8) :: radiuse
+        real (r8) :: gammas
+        real (r8) :: epsilons
+        real (r8) :: dists
+        real (r8) :: maxdist
+        real (r8) :: sx
+
+        !Density function parameters
+        ! ratio between high and low resolution cells
+        gammas = 5._r8
+        ! radius (in km) of high resolution area
+        maxdist = 500._r8
+        ! distance (in km) of transition zone belt
+        epsilons = 5000._r8
+
+        ! x is the input; the function is called like densf([lat, lon])
+        lat = x(1)
+        lon = x(2)
+        coslat = dcos (lat)
+
+        !Center of refined region is 0,0
+        !Distance to center ()
+        radiuse = 6367._r8
+        dists = radiuse * 2 * dasin(dsqrt(dsin(lat / 2._r8)**2 + coslat * dsin (lon / 2._r8)**2))
+
+        !Distance to center metric
+        sx=(dists-maxdist)/epsilons
+
+        !Set density
+        if(dists<=maxdist)then
+            !Point close to the center
+            dens_f=gammas**4
+        elseif((dists<=maxdist+epsilons) .and. (dists>maxdist))then
+            !Point in the transition
+            dens_f=((1._r8-sx)*gammas+sx)**4
+        else
+            !Point far from the center
+            dens_f=1
+        end if
+
+        !Normalization - Make it in [0,1]
+        dens_f = dens_f/gammas**4
     end function densf
-
-
 
     !--------------------------------------------------------------------------
     ! Bilinear interpolation
