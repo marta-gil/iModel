@@ -133,11 +133,11 @@ echo
 #lat=-64.875
 #lon=90.5 #1.23296 #31.7174
 #lat=-0.5 #-89.5 #-61.30099 #-0.0374
-lon=-60
+lon=-50
 lat=0
 
-#echo "Map center (set manually in plot.sh)"
-#echo $lon $lat
+echo "Map center (set manually in plot.sh)"
+echo $lon $lat
 echo $lon $lat > mapcenter.dat
 
 #MAP REGION
@@ -485,6 +485,7 @@ if [ $scalar ] ; then
     
     kcolor=1
 
+
     echo "Select color pallet:"
     echo " 1) White-DarkBlue"
     echo " 2) Blue-White-Red"
@@ -496,7 +497,7 @@ if [ $scalar ] ; then
     echo " 8) Grayscale "
     echo " 9) Blue-White-Red smoother"
     read kcolor
-    echo    
+    echo
 
     if [ $kcolor -eq 1 ] ; then  #White-Darkblue
         $gmt makecpt -Cdarkblue -I -T$minval/$maxval/$scale -Z \
@@ -507,7 +508,7 @@ if [ $scalar ] ; then
 	if [ $postest -eq 0 ] ; then
 	    #grd2cpt $scalar.grd -Cpolar  -Z -T= \
 	    $gmt grd2cpt $scalar.grd -Cbluered  -Z -T=  > $scalar.cpt
-	else            
+	else
             $gmt makecpt -Cpolar -T$minval/$maxval/$scale -Z \
     		--COLOR_BACKGROUND=blue  --COLOR_FOREGROUND=red > $scalar.cpt
 	fi
@@ -516,7 +517,7 @@ if [ $scalar ] ; then
     if [ $kcolor -eq 9 ] ; then #Blue - Red
 	if [ $postest -eq 0 ] ; then
 	    $gmt grd2cpt $scalar.grd -Cbluered_zero  -Z -T=  > $scalar.cpt
-	else            
+	else
             $gmt makecpt -Cpolar -T$minval/$maxval/$scale -Z \
     		--COLOR_BACKGROUND=blue  --COLOR_FOREGROUND=red > $scalar.cpt
 	fi
@@ -526,14 +527,14 @@ if [ $scalar ] ; then
 	$gmt makecpt -Cjet -T$minval/$maxval/$scale -Z  \
     	    --COLOR_BACKGROUND=0/0/127  --COLOR_FOREGROUND=127/0/0 > $scalar.cpt
     fi
-    
+
     if [ $kcolor -eq 4 ] ; then #Light Blue -White
 	$gmt makecpt -Cblue -T$minval/$maxval/$scale -Z  > $scalar.cpt
     fi
 
     if [ $kcolor -eq 5 ] ; then #Multicolor jet
 	$gmt makecpt -Cmulticol  -T$minval/$maxval/$scale -Z   > $scalar.cpt
-    fi    
+    fi
 
     if [ $kcolor -eq 6 ] ; then #Multicolor
 	#makecpt -Crainbow  -T$minval/$maxval/$scale -Z   > $scalar.cpt
@@ -541,7 +542,7 @@ if [ $scalar ] ; then
 	$gmt makecpt -Cseism_nonlin -I -T$minval/$maxval/$scale -Z   > $scalar.cpt
 	#makecpt -Cwysiwyg -I -T$minval/$maxval/$scale -Z   > $scalar.cpt
     	#--COLOR_BACKGROUND=0/0/127  --COLOR_FOREGROUND=127/0/0
-    fi    
+    fi
 
 
     if [ $kcolor -eq 7 ] ; then #Multicolor
@@ -552,7 +553,7 @@ if [ $scalar ] ; then
 	#makecpt -Cwysiwyg -I -T$minval/$maxval/$scale -Z   > $scalar.cpt
     	#--COLOR_BACKGROUND=0/0/127  --COLOR_FOREGROUND=127/0/0
     fi
-    
+
     if [ $kcolor -eq 8 ] ; then #Greyscale
 	#makecpt -Cjet  -T$minval/$maxval/$scale -Z   > $scalar.cpt
 	#makecpt -Chaxby -I -T$minval/$maxval/$scale -Z   > $scalar.cpt
@@ -561,7 +562,7 @@ if [ $scalar ] ; then
 	#$gmt makecpt -Cseism_nonlin -T$minval/$maxval/$scale -Z   > $scalar.cpt
 	#makecpt -Cwysiwyg -I -T$minval/$maxval/$scale -Z   > $scalar.cpt
     	#--COLOR_BACKGROUND=0/0/127  --COLOR_FOREGROUND=127/0/0
-    fi    
+    fi
 
 
     #grd2cpt $scalar.grd -Crainbow  -Z -V  > $scalar.cpt
@@ -570,6 +571,7 @@ if [ $scalar ] ; then
     #-------------------------------------------------
 
     #Plot scalar field map
+    echo "plot scalar field map"
     $gmt grdimage $scalar.grd -C$scalar.cpt  $map  -O -K -V  >> $plot
 
     if [ "$gmt" == "$gmt5" ]; then
@@ -583,7 +585,7 @@ if [ $scalar ] ; then
 	$format_scale >> $plot   
 
     #Print coast
-    #$gmt pscoast  $map -Wfaint,150 -K -O >> $plot
+    $gmt pscoast  $map -Wfaint,150 -K -O >> $plot
 
     rm -rf $scalar.grd
     rm -rf $scalar.cpt
