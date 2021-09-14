@@ -89,11 +89,13 @@ contains
     ! their application to climate and global modeling' by Lili Ju, Todd
     ! Ringler and Max Gunzburger
     !
-    ! Marta Gil Bardají - Vortex FdC
+    ! Modifications. Marta Gil Bardají - Vortex FdC
     ! - Centered at 0 always
-    ! - Gammas (ratio between small and large cells) larger than 3
-    ! - Small high resolution area maxdist = 0.017 for 100km radius
-    ! - Large transition area -> some relation to gamma? maxdist?
+    ! - Gammas ('ratio' between small and large cells) larger than 3
+    ! - Small high resolution area of radius: maxdist = 100 (in km!)
+    ! - Large transition area -> of thousands of kilometers
+    ! - Distance to the center: Haversine Formula (great-circle distance)
+    !     (https://www.movable-type.co.uk/scripts/latlong.html)
     !--------------------------------------------------------------------------
     real (r8) function densf(x) result(dens_f)
         real (r8), dimension(1:2), intent(in) :: x

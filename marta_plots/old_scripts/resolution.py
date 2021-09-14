@@ -86,7 +86,6 @@ plt.ylabel('Resolution')
 plt.savefig('hist_resolution.png')
 plt.close()
 
-exit()
 ind = pds[['resolution']].idxmin()
 point = [pds.iloc[ind]['longitude'].values[0], pds.iloc[ind]['latitude'].values[0]]
 print(point)
@@ -97,7 +96,7 @@ plot_var_mpas(pds, 'round_res', 'round_res.png')
 
 plot_var_mpas(pds, 'resolution', 'res.png')
 
-for lim in [1.0, 2.0, 5.0, 10.0]:
+for lim in [1.0, 2.0, 5.0, 7.0, 10.0]:
     pds_small = pds.where((pds['longitude'] < point[0] + lim)
                           & (pds['longitude'] > point[0] - lim)
                           & (pds['latitude'] < point[1] + lim)
@@ -105,7 +104,7 @@ for lim in [1.0, 2.0, 5.0, 10.0]:
     plot_var_mpas(pds_small, 'round_res', 'centered_margin_' + str(lim) + '.png')
 
 
-for limit in [15.0, 30.0, 60.0]:
+for limit in [15.0, 27.0, 30.0, 60.0]:
     good = pds.where(pds['round_res'] < limit)
     plot_var_mpas(good, 'round_res', 'smaller_than_' + str(limit) + '.png')
 
