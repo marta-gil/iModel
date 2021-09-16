@@ -133,7 +133,7 @@ echo
 #lat=-64.875
 #lon=90.5 #1.23296 #31.7174
 #lat=-0.5 #-89.5 #-61.30099 #-0.0374
-lon=-50
+lon=0
 lat=0
 
 echo "Map center (set manually in plot.sh)"
@@ -195,8 +195,9 @@ if [ $kmap -eq 3 ] ;then  #Local Mercator projection
     lonmin=`echo "scale=12; ( $lon - $dlon)" | bc -l `
     lonmax=`echo "scale=12; ( $lon + $dlon)" | bc -l `
     #Local - Prefer region with 30 degree square
-    #reg="-R-65/65/-65/65"
     reg="-R$lonmin/$lonmax/$latmin/$latmax"
+
+    reg="-R-180/180/-85/85"
     map=$reg" -JM11"
     echo "Region:" $reg
     echo "   (Manualy define region in plot.sh if necessary)"

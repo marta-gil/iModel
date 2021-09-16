@@ -2,10 +2,11 @@
 BEGIN GMT 6.0.0
 B	0
 J	A
-JA	A-50/0/14
+JA	A0/0/14
 JM	M11
+Jx	x0.06d
 R	g
 X	c
 Y	c
-@L	3
+@L	5
 END
