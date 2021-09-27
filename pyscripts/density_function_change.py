@@ -80,59 +80,20 @@ def density_function(lat, lon, **kwargs):
     return dens_f
 
 
-# lat-lon grid
-nlat = 1024*2
-nlon = 2048*2
+def density_to_resolution(dens, N=200000):
+    sum_dens = dens.sum()
+    print(sum_dens)
 
-lats = np.linspace(-90.0, 90.0, nlat + 1)
-lons = np.linspace(-180.0, 180.0, nlon + 1)
-lons, lats = np.meshgrid(lons, lats)
-
-# compute the density function in the lat-lon grid
-print("Computing the density function in the lat-lon grid...")
-data = density_function(lats, lons, gammas=20, radkm=100, epsilons=8000)
-print("Done\n")
+    res = N * dens / sum_dens
+    print(res)
+    return res
 
 
-# saves the data in densf_table
-datadir = "../altitude/"
-print("Saving the data in the file " + datadir + "densf_table.dat...")
-with open(datadir + 'densf_table.dat', 'w') as f:
-    f.write(str(nlat + 1))
-    f.write(" ")
-    f.write(str(nlon + 1))
-    f.write('\n')
-    for i in range(0, nlat + 1):
-        for j in range(0, nlon + 1):
-            f.write(str(lat[i, j]))
-            f.write(" ")
-            f.write(str(lon[i, j]))
-            f.write(" ")
-            f.write(str(data[i, j]))
-            f.write('\n')
-print("Done\n")
+dists = np.linspace(0.0, 10000.0, 50000)
+dens = density_function_dists(dists)
+res = density_to_resolution(dens)
 
-# plot the data
-graphdir = "../graphs/"
-print("Ploting the density function graph in " + graphdir + "...")
-plt.figure()
-
-# plot contours
-#plt.contour(lons, lats, data, colors='black')
-cp = plt.contourf(lons, lats, data, 100, cmap='magma')
-
-# label the axis
-plt.xlabel('Longitude', fontsize=14)
-plt.ylabel('Latitude', fontsize=14)
-
-# plot colobar
-cbar = plt.colorbar(cp)
-cbar.formatter.set_powerlimits((0, 0))
-cbar.update_ticks()
-
-# show, save and close
-plt.gca().set_aspect('equal')
-plt.savefig(graphdir + 'density_function.png', format='png')
+plt.plot(dists, res)
 plt.show()
 plt.close()
-print("Done")
+
