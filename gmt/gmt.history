@@ -1,11 +1,11 @@
 # GMT 6 Session common arguments shelf
 BEGIN GMT 6.0.0
-B	0
-J	A
+B	WSnex40y40
+J	x
 JA	A0/0/14
 JM	M11
 Jx	x0.06d
-R	g
+R	-180/180/-90/90
 X	c
 Y	c
 @L	5

@@ -133,11 +133,11 @@ echo
 #lat=-64.875
 #lon=90.5 #1.23296 #31.7174
 #lat=-0.5 #-89.5 #-61.30099 #-0.0374
-lon=-60
+lon=0
 lat=0
 
-#echo "Map center (set manually in plot.sh)"
-#echo $lon $lat
+echo "Map center (set manually in plot.sh)"
+echo $lon $lat
 echo $lon $lat > mapcenter.dat
 
 #MAP REGION
@@ -564,7 +564,7 @@ if [ $scalar ] ; then
     fi    
 
 
-    #grd2cpt $scalar.grd -Crainbow  -Z -V  > $scalar.cpt
+    grd2cpt $scalar.grd -Crainbow  -Z -V  > $scalar.cpt
     #grd2cpt $scalar.grd -Chot  -Z -V  -I > $scalar.cpt
 
     #-------------------------------------------------
