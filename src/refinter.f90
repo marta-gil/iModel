@@ -112,11 +112,11 @@ contains
 
         !Density function parameters
         ! ratio between high and low resolution cells
-        gammas = 25._r8
+        gammas = 50._r8
         ! radius (in km) of high resolution area
-        maxdist = 40._r8
+        maxdist = 20._r8
         ! distance (in km) of transition zone belt
-        epsilons = 5000._r8
+        epsilons = 500._r8
 
         ! x is the input; the function is called like densf([lat, lon])
         lat = x(1)
