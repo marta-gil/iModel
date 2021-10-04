@@ -104,19 +104,19 @@ contains
         real (r8) :: lon
         real (r8) :: coslat
         real (r8) :: radiuse
-        real (r8) :: gammas
+        real (r8) :: slope
         real (r8) :: epsilons
         real (r8) :: dists
         real (r8) :: maxdist
         real (r8) :: sx
 
         !Density function parameters
-        ! ratio between high and low resolution cells
-        gammas = 50._r8
+        ! (increase_of_resolution) / (distance)
+        slope = 15._r8/300._r8
         ! radius (in km) of high resolution area
-        maxdist = 20._r8
+        maxdist = 10._r8
         ! distance (in km) of transition zone belt
-        epsilons = 500._r8
+        epsilons = 8000._r8
 
         ! x is the input; the function is called like densf([lat, lon])
         lat = x(1)
@@ -129,22 +129,22 @@ contains
         dists = radiuse * 2 * dasin(dsqrt(dsin(lat / 2._r8)**2 + coslat * dsin (lon / 2._r8)**2))
 
         !Distance to center metric
-        sx=(dists-maxdist)/epsilons
+        sx=(dists-maxdist)*slope
 
         !Set density
         if(dists<=maxdist)then
             !Point close to the center
-            dens_f=gammas**4
+            dens_f=1.0
         elseif((dists<=maxdist+epsilons) .and. (dists>maxdist))then
             !Point in the transition
-            dens_f=((1._r8-sx)*gammas+sx)**4
+            dens_f=1.0 + sx
         else
             !Point far from the center
-            dens_f=1
+            dens_f=1.0 + epsilons*slope
         end if
 
         !Normalization - Make it in [0,1]
-        dens_f = dens_f/gammas**4
+        dens_f = 1.0 / dens_f**2
     end function densf
 
     !--------------------------------------------------------------------------
