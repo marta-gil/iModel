@@ -11,7 +11,7 @@ import numpy as np
 import os
 
 
-def plot_var_mpas(data, var, file, title='nCells'):
+def plot_var_mpas(data, var, file=None, title=''):
     if not os.path.exists(file):
         palette = "cubehelix_r"
         num = data[var].count()
@@ -22,7 +22,10 @@ def plot_var_mpas(data, var, file, title='nCells'):
         plt.gca().set_aspect('equal')
         plt.legend()
         plt.title(title)
-        plt.savefig(file)
+        if file is not None:
+            plt.savefig(file)
+        else:
+            plt.show()
         plt.close()
         
         

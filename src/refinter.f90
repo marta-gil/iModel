@@ -112,11 +112,11 @@ contains
 
         !Density function parameters
         ! (increase_of_resolution) / (distance)
-        slope = 15._r8/300._r8
+        slope = 10._r8/500._r8
         ! radius (in km) of high resolution area
-        maxdist = 10._r8
+        maxdist = 50._r8
         ! distance (in km) of transition zone belt
-        epsilons = 8000._r8
+        epsilons = 5000._r8
 
         ! x is the input; the function is called like densf([lat, lon])
         lat = x(1)
