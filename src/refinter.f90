@@ -102,7 +102,8 @@ contains
         real (r8), dimension(1:3) :: p
         real (r8) :: lat
         real (r8) :: lon
-        real (r8) :: coslat
+        real (r8) :: latc
+        real (r8) :: lonc
         real (r8) :: radiuse
         real (r8) :: slope
         real (r8) :: epsilons
@@ -112,21 +113,25 @@ contains
 
         !Density function parameters
         ! (increase_of_resolution) / (distance)
-        slope = 10._r8/500._r8
+        slope = 1._r8/12._r8
         ! radius (in km) of high resolution area
-        maxdist = 50._r8
-        ! distance (in km) of transition zone belt
-        epsilons = 5000._r8
+        maxdist = 20._r8
+        ! distance (in km) of transition zone belt: ratio / slope
+        epsilons = 500._r8/slope
+        if(epsilons > 8000._r8)then
+            epsilons = 8000._r8
+        end if
 
         ! x is the input; the function is called like densf([lat, lon])
         lat = x(1)
         lon = x(2)
-        coslat = dcos (lat)
 
-        !Center of refined region is 0,0
+        !Center of refined region is 0,-8.4559 (center of pentagon)
+        latc=-8.4559*pi/180._r8
+        lonc=0.0*pi/180._r8
         !Distance to center ()
         radiuse = 6367._r8
-        dists = radiuse * 2 * dasin(dsqrt(dsin(lat / 2._r8)**2 + coslat * dsin (lon / 2._r8)**2))
+        dists = radiuse * 2 * dasin(dsqrt(dsin((latc - lat) / 2._r8)**2 + dcos(lat) * dcos(latc) * dsin ((lonc-lon) / 2._r8)**2))
 
         !Distance to center metric
         sx=(dists-maxdist)*slope
