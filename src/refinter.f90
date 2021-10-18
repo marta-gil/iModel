@@ -127,8 +127,9 @@ contains
         lon = x(2)
 
         !Center of refined region is 0,-8.4559 in radians (center of pentagon)
-        latc=-8.4559
-        lonc=0.0
+        ! TODO cannot do latc=-8.4559
+        latc=0._r8
+        lonc=0._r8
         !Distance to center ()
         radiuse = 6367._r8
         dists = radiuse * 2 * dasin(dsqrt(dsin((latc - lat) / 2._r8)**2 + dcos(lat) * dcos(latc) * dsin ((lonc-lon) / 2._r8)**2))
