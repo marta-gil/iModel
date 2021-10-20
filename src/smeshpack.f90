@@ -1164,31 +1164,31 @@ contains
     ! Geodesic to regular grid convertion tool - search table
     !-------------------------------------------------------
     if(.not.opt)then
-       print*, "Creating geodesic to regular grid tool (Search table) ... "
+       print*, "SKIPPING Creating geodesic to regular grid tool (Search table) ... "
 
        !Calculate the regular grid spacing
-       if(trim(mesh%kind)=='rand' .and. trim(mesh%optm)=='nopt')then
-          print *
-          print *, "Mesh with random nodes: Search table may not be trustworthy"
-          print *
-          mesh%dlat=mesh%meanvdist/10._r8
-       else
-          ! Forces to be less then 3 times smaller than the smallest triangle
-          if(trim(mesh%pos)=='ref' .or. trim(mesh%pos)=='readref' .or. trim(mesh%pos)=='readref_andes')then
-             mesh%dlat=mesh%minvdist/3._r8
-          else
-             mesh%dlat=mesh%minvdist/3.5_r8
-          end if
-       end if
-       mesh%nlat=int (pi/mesh%dlat, i4)
-       mesh%nlat=int(real(mesh%nlat, r8)/real(10.0,r8))*10_i4+10_i4
-       mesh%dlat=pi/real(mesh%nlat, r8)
-       print*, "nlat=",mesh%nlat," dlat=",mesh%dlat*rad2deg, " degrees"
+       !if(trim(mesh%kind)=='rand' .and. trim(mesh%optm)=='nopt')then
+       !   print *
+       !   print *, "Mesh with random nodes: Search table may not be trustworthy"
+       !   print *
+       !   mesh%dlat=mesh%meanvdist/10._r8
+       !else
+       !   ! Forces to be less then 3 times smaller than the smallest triangle
+       !   if(trim(mesh%pos)=='ref' .or. trim(mesh%pos)=='readref' .or. trim(mesh%pos)=='readref_andes')then
+       !      mesh%dlat=mesh%minvdist/3._r8
+       !   else
+       !      mesh%dlat=mesh%minvdist/3.5_r8
+       !   end if
+       !end if
+       !mesh%nlat=int (pi/mesh%dlat, i4)
+       !mesh%nlat=int(real(mesh%nlat, r8)/real(10.0,r8))*10_i4+10_i4
+       !mesh%dlat=pi/real(mesh%nlat, r8)
+       !print*, "nlat=",mesh%nlat," dlat=",mesh%dlat*rad2deg, " degrees"
 
-       call geo2reg(mesh)
+       !call geo2reg(mesh)
 
-       print*,"Mesh structured."
-       print*
+       !print*,"Mesh structured."
+       !print*
     end if
 
     return

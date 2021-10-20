@@ -113,11 +113,11 @@ contains
 
         !Density function parameters
         ! (increase_of_resolution) / (distance)
-        slope = 1._r8/12._r8
+        slope = 10._r8/500._r8
         ! radius (in km) of high resolution area
-        maxdist = 20._r8
+        maxdist = 50._r8
         ! distance (in km) of transition zone belt: ratio / slope
-        epsilons = 500._r8/slope
+        epsilons = 100._r8/slope
         if(epsilons > 8000._r8)then
             epsilons = 8000._r8
         end if
