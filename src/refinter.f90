@@ -113,13 +113,13 @@ contains
 
         !Density function parameters
         ! (increase_of_resolution) / (distance)
-        slope = 10._r8/500._r8
+        slope = 15._r8/500._r8
         ! radius (in km) of high resolution area
         maxdist = 50._r8
         ! distance (in km) of transition zone belt: ratio / slope
-        epsilons = 100._r8/slope
-        if(epsilons > 8000._r8)then
-            epsilons = 8000._r8
+        epsilons = 150._r8/slope
+        if(epsilons > 10000._r8)then
+            epsilons = 10000._r8
         end if
 
         ! x is the input; the function is called like densf([lat, lon])
