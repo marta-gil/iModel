@@ -91,66 +91,68 @@ contains
     !
     ! Modifications. Marta Gil Bardají - Vortex FdC
     ! - Centered at 0 always
-    ! - Gammas ('ratio' between small and large cells) larger than 3
-    ! - Small high resolution area of radius: maxdist = 100 (in km!)
+    ! - Small high resolution area of radius: maxdist = 50 (in km!)
     ! - Large transition area -> of thousands of kilometers
+    ! - Linear increase of resolution in transition area
     ! - Distance to the center: Haversine Formula (great-circle distance)
     !     (https://www.movable-type.co.uk/scripts/latlong.html)
+    ! - To translate "resolution" to density function use the relation:
+    !       density is proportional to 1/resolution**2
     !--------------------------------------------------------------------------
     real (r8) function densf(x) result(dens_f)
         real (r8), dimension(1:2), intent(in) :: x
         real (r8), dimension(1:3) :: p
         real (r8) :: lat
         real (r8) :: lon
-        real (r8) :: latc
-        real (r8) :: lonc
         real (r8) :: radiuse
+        real (r8) :: maxdist
         real (r8) :: slope
         real (r8) :: epsilons
         real (r8) :: dists
-        real (r8) :: maxdist
         real (r8) :: sx
+        real (r8) :: resolution
 
-        !Density function parameters
+        ! Density function parameters
+
+        ! Radius (in km) of high resolution area
+        maxdist = 50._r8
         ! (increase_of_resolution) / (distance)
         slope = 10._r8/600._r8
-        ! radius (in km) of high resolution area
-        maxdist = 50._r8
         ! distance (in km) of transition zone belt: ratio / slope
         epsilons = 150._r8/slope
         if(epsilons > 10000._r8)then
             epsilons = 10000._r8
         end if
 
+        ! Other Parameters
+        ! Radius of the earth in km
+        radiuse = 6367._r8
+
         ! x is the input; the function is called like densf([lat, lon])
         lat = x(1)
         lon = x(2)
 
-        !Center of refined region is 0,-8.4559 in radians (center of pentagon)
-        ! TODO cannot do latc=-8.4559
-        latc=0._r8
-        lonc=0._r8
-        !Distance to center ()
-        radiuse = 6367._r8
-        dists = radiuse * 2 * dasin(dsqrt(dsin((latc - lat) / 2._r8)**2 + dcos(lat) * dcos(latc) * dsin ((lonc-lon) / 2._r8)**2))
+        !Center of refined region is 0,0
+        !Distance to center (Haversine Formula)
+        dists = radiuse * 2 * dasin(dsqrt(dsin(lat / 2._r8)**2 + dcos(lat) * dsin ((lon / 2._r8)**2))
 
         !Distance to center metric
         sx=(dists-maxdist)*slope
 
-        !Set density
+        !Set resolution
         if(dists<=maxdist)then
-            !Point close to the center
-            dens_f=1.0
+            !Point close to the center -> maximum resolution "1"
+            resolution=1.0
         elseif((dists<=maxdist+epsilons) .and. (dists>maxdist))then
-            !Point in the transition
-            dens_f=1.0 + sx
+            !Point in the transition -> less resolution (>1)
+            resolution=1.0 + sx
         else
-            !Point far from the center
-            dens_f=1.0 + epsilons*slope
+            !Point far from the center -> constant high resolution
+            resolution=1.0 + epsilons*slope
         end if
 
-        !Normalization - Make it in [0,1]
-        dens_f = 1.0 / dens_f**2
+        !Convert resolution to density (proportional relationship)
+        dens_f = 1.0 / resolution**2
     end function densf
 
     !--------------------------------------------------------------------------

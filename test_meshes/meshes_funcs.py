@@ -18,20 +18,21 @@ def density_function_dists(dists, slope=None, gammas=None, maxdist=None,
     if epsilons > maxepsilons:
         epsilons = maxepsilons
 
-    # initialize with density = 1
-    dens_f = np.ones(np.shape(dists))
+    # initialize with resolution = 1
+    resolution = np.ones(np.shape(dists))
 
     # point in transition zone
     transition_zone = (dists > maxdist) & (dists <= maxdist + epsilons)
     sx = (dists -maxdist ) *slope
     transition_values = 1.0 + sx
-    dens_f = np.where(transition_zone, transition_values, dens_f)
+    resolution = np.where(transition_zone, transition_values, resolution)
 
     # further points
     far_from_center = (dists > maxdist + epsilons)
-    dens_f[far_from_center] += epsilons *slope
+    resolution[far_from_center] += epsilons * slope
 
-    dens_f = 1 / dens_f**2
+    # convert to density
+    dens_f = 1 / resolution**2
     return dens_f
 
 
@@ -271,8 +272,11 @@ def study_mesh(file, **kwargs):
     print('Different Radius')
     for lim in [50, 100, 150, 200]:
         small = reduced.where(reduced['distance'] < lim)
-        plot_var_mpas_crss(small, 'resolution', show=True,
-                           title='Closer than %.1fkm' % lim)
+        try:
+            plot_var_mpas_crss(small, 'resolution', show=True,
+                               title='Closer than %.1fkm' % lim)
+        except:
+            print('No cells with distance to 0,0 lower than %.1fkm' % lim)
 
     print('Different highest resolution')
     for limit in [3.0, 5.0, 10.0, 15.0, 30.0]:
